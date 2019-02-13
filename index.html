@@ -11,8 +11,37 @@
             text-align: center;
             white-space: nowrap;
         }
+        .action-section {
+            text-align: center;
+            margin: 20px 20px;
+        }
+        .action-block {
+            text-align: center;
+            width: 100px;
+            height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 50px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+        .bg-attack {
+            background-color: red;
+        }
+        .bg-special-attack {
+            background-color: yellow;
+        }
+        .bg-heal {
+            background-color: green;
+        }
+        .bg-give-up {
+            background-color: gray;
+        }
+        .bg-newgame {
+            background-color: orange;
+        }
         .power-section {
-            height: 100px;
+            height: auto;
             width: 50%;
             display: inline-block;
             text-align: center;
@@ -36,37 +65,66 @@
 </head>
 <body>
     <div id="game_canvas">
-        <div class="power-section">
-            <h1>Human</h1>
-            <div class="power-block">
-                <div class="power-dynamic" :style="{width: power.human+'%'}">
-                    {{ power.human }}
+        <div style="display: block;">
+            <div class="power-section">
+                <h1>Human</h1>
+                <div class="power-block">
+                    <div class="power-dynamic" :style="{width: human+'%'}">
+                        {{ human }}
+                    </div>
+                </div>
+            </div>
+            <div class="power-section">
+                <h1>Monster</h1>
+                <div class="power-block">
+                    <div class="power-dynamic" :style="{width: monster+'%'}">
+                        {{ monster }}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="power-section">
-            <h1>Monster</h1>
-            <div class="power-block">
-                <div class="power-dynamic" :style="{width: power.monster+'%'}">
-                    {{ power.monster }}
-                </div>
-            </div>
+        <div class="action-section">
+            <template v-if="!isGiveUp">
+                <div class="action-block bg-attack" @click="attackMoster">Attack</div>
+                <div class="action-block bg-special-attack" @click="specialAttackMonster">Special Attack</div>
+                <div class="action-block bg-heal" @click="healHuman">Heal</div>
+                <div class="action-block bg-give-up" @click="humanGiveup">Give Up</div>
+            </template>
+            <div class="action-block bg-newgame" @click="newGame" v-else>New Game</div>
         </div>
     </div>
     <script>
         new Vue({
             el: '#game_canvas',
             data: {
-                power: {
-                    monster: 100,
-                    human: 100
-                }
-            },
-            computed: {
-
+                monster: 100,
+                human: 100,
+                isGiveUp: false
             },
             methods: {
-
+                attackMoster: function() {
+                    this.monster -= 3;
+                    this.attackHuman();
+                },
+                attackHuman: function() {
+                    this.human -= 5;
+                },
+                specialAttackMonster: function() {
+                    this.monster -= 10;
+                    this.attackHuman();
+                },
+                healHuman: function() {
+                    this.human += 5;
+                    this.attackHuman();
+                },
+                humanGiveup: function() {
+                    this.isGiveUp = true;
+                },
+                newGame: function() {
+                    this.human = 100;
+                    this.monster = 100;
+                    this.isGiveUp = false;
+                }
             }
         });
     </script>
