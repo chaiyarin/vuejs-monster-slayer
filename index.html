@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Monster Slayer</title>
+    <script src="vue.js"></script>
+    <style>
+        #game_canvas {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .power-section {
+            height: 100px;
+            width: 50%;
+            display: inline-block;
+            text-align: center;
+        }
+        .power-block {
+            width: 400px;
+            height: 40px;
+            background-color: gray;
+            margin: 0 auto;
+        }
+        .power-dynamic {
+            width: 100%;
+            height: 40px;
+            background-color: green;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 40px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="game_canvas">
+        <div class="power-section">
+            <h1>Human</h1>
+            <div class="power-block">
+                <div class="power-dynamic" :style="{width: power.human+'%'}">
+                    {{ power.human }}
+                </div>
+            </div>
+        </div>
+        <div class="power-section">
+            <h1>Monster</h1>
+            <div class="power-block">
+                <div class="power-dynamic" :style="{width: power.monster+'%'}">
+                    {{ power.monster }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#game_canvas',
+            data: {
+                power: {
+                    monster: 100,
+                    human: 100
+                }
+            },
+            computed: {
+
+            },
+            methods: {
+
+            }
+        });
+    </script>
+</body>
+</html>
