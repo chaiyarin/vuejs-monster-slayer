@@ -61,6 +61,18 @@
             line-height: 40px;
             color: white;
         }
+        .monster-row {
+            background-color: #FF5252;
+        }
+        .human-row {
+            background-color: #1DE9B6;
+        }
+        .heal-row {
+            background-color: #82B1FF;
+        }
+        .special-row {
+            background-color: #FFEB3B;
+        }
     </style>
 </head>
 <body>
@@ -93,7 +105,8 @@
             <div class="action-block bg-newgame" @click="newGame" v-else>New Game</div>
         </div>
         <div>
-            <div v-for="log in logs">{{ log.action }} : {{ log.damage }}</div>
+            <div v-for="log in logs"
+            :class="listClass(log.type)">{{ log.action }} : {{ log.damage }}</div>
         </div>
     </div>
     <script>
@@ -108,21 +121,21 @@
             methods: {
                 attackMoster: function() {
                     this.monster -= 3;
-                    this.actionLog('Human Attack Monster', 3);
+                    this.actionLog('Human Attack Monster', 3, 'human');
                     this.attackHuman();
                 },
                 attackHuman: function(damage = 5) {
                     this.human -= damage;
-                    this.actionLog('Monster Attack Human', damage);
+                    this.actionLog('Monster Attack Human', damage, 'monster');
                 },
                 specialAttackMonster: function() {
                     this.monster -= 10;
-                    this.actionLog('Special Attack Moster', 10);
+                    this.actionLog('Special Attack Moster', 10, 'special');
                     this.attackHuman();
                 },
                 healHuman: function() {
                     this.human += 6;
-                    this.actionLog('Human Heal', 10);
+                    this.actionLog('Human Heal', 10, 'heal');
                     this.attackHuman(3);
                 },
                 humanGiveup: function() {
@@ -133,8 +146,29 @@
                     this.monster = 100;
                     this.isGiveUp = false;
                 },
-                actionLog: function(action, damage) {
-                    this.logs.push({action: action, damage: damage});
+                actionLog: function(action, damage, type) {
+                    this.logs.push({action: action, damage: damage, type: type});
+                },
+                listClass: function(type) {
+                    if(type == 'human') {
+                        return 'human-row';
+                    }
+                    if(type == 'monster') {
+                        return 'monster-row';
+                    }
+                    if(type == 'heal') {
+                        return 'heal-row';
+                    }
+                    switch(type) {
+                        case 'human':
+                            return 'human-row';
+                        case 'monster':
+                            return 'monster-row';
+                        case 'heal':
+                            return 'heal-row';
+                        case 'special':
+                            return 'special-row';
+                    }
                 }
             }
         });
