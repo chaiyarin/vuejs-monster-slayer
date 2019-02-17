@@ -92,6 +92,9 @@
             </template>
             <div class="action-block bg-newgame" @click="newGame" v-else>New Game</div>
         </div>
+        <div>
+            <div v-for="log in logs">{{ log.action }} : {{ log.damage }}</div>
+        </div>
     </div>
     <script>
         new Vue({
@@ -99,23 +102,28 @@
             data: {
                 monster: 100,
                 human: 100,
-                isGiveUp: false
+                isGiveUp: false,
+                logs: []
             },
             methods: {
                 attackMoster: function() {
                     this.monster -= 3;
+                    this.actionLog('Human Attack Monster', 3);
                     this.attackHuman();
                 },
-                attackHuman: function() {
-                    this.human -= 5;
+                attackHuman: function(damage = 5) {
+                    this.human -= damage;
+                    this.actionLog('Monster Attack Human', damage);
                 },
                 specialAttackMonster: function() {
                     this.monster -= 10;
+                    this.actionLog('Special Attack Moster', 10);
                     this.attackHuman();
                 },
                 healHuman: function() {
-                    this.human += 5;
-                    this.attackHuman();
+                    this.human += 6;
+                    this.actionLog('Human Heal', 10);
+                    this.attackHuman(3);
                 },
                 humanGiveup: function() {
                     this.isGiveUp = true;
@@ -124,6 +132,9 @@
                     this.human = 100;
                     this.monster = 100;
                     this.isGiveUp = false;
+                },
+                actionLog: function(action, damage) {
+                    this.logs.push({action: action, damage: damage});
                 }
             }
         });
