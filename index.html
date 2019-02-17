@@ -102,7 +102,7 @@
                 <div class="action-block bg-heal" @click="healHuman">Heal</div>
                 <div class="action-block bg-give-up" @click="humanGiveup">Give Up</div>
             </template>
-            <div class="action-block bg-newgame" @click="newGame" v-else>New Game</div>
+            <div class="action-block bg-newgame" @click="resetGame" v-else>New Game</div>
         </div>
         <div>
             <div v-for="log in logs"
@@ -117,6 +117,20 @@
                 human: 100,
                 isGiveUp: false,
                 logs: []
+            },
+            watch: {
+                human: function(val) {
+                    if(val <= 0) {
+                        alert('Monster Win');
+                        this.resetGame();
+                    }
+                },
+                monster: function(val) {
+                    if(val <= 0) {
+                        alert('Human Win')
+                        this.resetGame();
+                    }
+                }
             },
             methods: {
                 attackMoster: function() {
@@ -141,24 +155,10 @@
                 humanGiveup: function() {
                     this.isGiveUp = true;
                 },
-                newGame: function() {
-                    this.human = 100;
-                    this.monster = 100;
-                    this.isGiveUp = false;
-                },
                 actionLog: function(action, damage, type) {
                     this.logs.push({action: action, damage: damage, type: type});
                 },
                 listClass: function(type) {
-                    if(type == 'human') {
-                        return 'human-row';
-                    }
-                    if(type == 'monster') {
-                        return 'monster-row';
-                    }
-                    if(type == 'heal') {
-                        return 'heal-row';
-                    }
                     switch(type) {
                         case 'human':
                             return 'human-row';
@@ -169,6 +169,12 @@
                         case 'special':
                             return 'special-row';
                     }
+                },
+                resetGame: function() {
+                    this.human = 100;
+                    this.monster = 100;
+                    this.logs = [];
+                    this.isGiveUp = false;
                 }
             }
         });
